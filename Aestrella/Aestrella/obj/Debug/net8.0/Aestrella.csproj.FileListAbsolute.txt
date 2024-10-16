@@ -1,0 +1,15 @@
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/bin/Debug/net8.0/Aestrella
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/bin/Debug/net8.0/Aestrella.deps.json
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/bin/Debug/net8.0/Aestrella.runtimeconfig.json
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/bin/Debug/net8.0/Aestrella.dll
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/bin/Debug/net8.0/Aestrella.pdb
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.GeneratedMSBuildEditorConfig.editorconfig
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.AssemblyInfoInputs.cache
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.AssemblyInfo.cs
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.csproj.CoreCompileInputs.cache
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.sourcelink.json
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.dll
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/refint/Aestrella.dll
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.pdb
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/Aestrella.genruntimeconfig.cache
+/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/Debug/net8.0/ref/Aestrella.dll
