@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime;
+using System.Data;
 
 namespace Aestrella
 {
@@ -12,6 +13,11 @@ namespace Aestrella
         //i=fila j=columna
         public int i;
         public int j;
+        public Punto()
+        {
+            this.i = 0;
+            this.j = 0;
+        }
     }
     class Laberinto
     {   /*
@@ -35,27 +41,7 @@ namespace Aestrella
                 char[] charaux = aux.ReadLine().ToCharArray();
 
 
-                //inicializaciones del Punto inicio y punto final
-                //se va a hacer el recorrido para cada fila del arreglo
-                Punto auxPto = new Punto();
-                auxPto.j = Array.FindIndex(charaux, x => x == 'A');//Si este metodo no encuentra el elemento en el arreglo, devuelve -1 en vez del indice 
-                //Como arreglo 2D es jagged, el indice de este auxiliar corresponde a las columnas
-                auxPto.i = 0;
-                if (auxPto.j > 0)
-                {
-                    this.Inicio = auxPto;
-                    this.Actual = this.Inicio;
-                }
-                //Se repite lo mismo para Final
-                auxPto.j = Array.FindIndex(charaux, x => x == 'B');
                 
-                auxPto.i = 0;
-                if (auxPto.j > 0)
-                {
-                    this.Final = auxPto;
-                    
-                }
-
 
                 int size = charaux.Length;//tamaño obtenido manualmente
                 this.size = size;
@@ -71,28 +57,36 @@ namespace Aestrella
 
                     charaux = aux.ReadLine().ToCharArray();
                     //inicializacion Pto Inicial
-                    auxPto.j= Array.FindIndex(charaux, x => x == 'A');
                     
-                    if (auxPto.j > 0)
-                    {
-                        auxPto.i = i;
-                        this.Inicio = auxPto;
-                        this.Actual = this.Inicio;
-                    }
-                    auxPto.j = Array.FindIndex(charaux, x => x == 'B');
-
-                    //Inicializacion Pto FInal
-                    if (auxPto.j > 0)
-                    {
-                        auxPto.i = i;
-                        this.Final = auxPto;
-                    }
+                    
+                  
                     auxlab[i] = charaux;
                     i++;
                 }
                 this.laberinto = auxlab;
                 aux.Close();
-
+                //inicializaciones del Punto inicio y punto final
+                //se va a recorrer la matriz entera para definir puntos
+                Punto auxPto1 = new Punto();
+                Punto auxPto2 = new Punto();               
+                for (int k=0; k<size; k++)
+                {
+                    if (auxlab[k].Contains('A'))
+                    {
+                        auxPto1.i = k;
+                        auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
+                        this.Inicio= auxPto1;
+                        this.Actual = auxPto1;
+                    }
+                    if (auxlab[k].Contains('B'))
+                    {
+                        auxPto2.i = k;
+                        auxPto2.j = Array.FindIndex(auxlab[k], x => x == 'B');
+                        this.Final= auxPto2;
+                    }
+                }
+                
+               
 
 
             }
@@ -108,6 +102,7 @@ namespace Aestrella
                 }
                 Console.WriteLine();
             }
+            
             Console.WriteLine($"Inicio: {Inicio.i},{Inicio.j}");
             Console.WriteLine($"Final: {Final.i},{Final.j}");
         }
