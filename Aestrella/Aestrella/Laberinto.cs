@@ -45,14 +45,14 @@ namespace Aestrella
 
                 int size = charaux.Length;//tamaño obtenido manualmente
                 this.size = size;
-                //como laberintos van a ser cuadrados se usa largode primera linea
+                //como laberintos van a ser cuadrados se usa largo de primera linea
                 //el arreglo es de tipo escalonado o jagged, donde la cantidad de filas
                 //es estatica, pero las columnas son dinamicas, por eso solo se declara las 
                 //filas como tamaño
                 char[][] auxlab = new char[size][];
                 auxlab[0] = charaux;
                 int i = 1;//i, contador que se va a usar para rellenar arreglo
-                while (aux.Peek()!=-1) 
+                while (aux.Peek()!=-1) //cuando metodo peek de StreamReader devuelve -1, no hay mas caracteres en el archivo
                 {                       
 
                     charaux = aux.ReadLine().ToCharArray();
@@ -64,15 +64,17 @@ namespace Aestrella
                     i++;
                 }
                 this.laberinto = auxlab;
-                aux.Close();
+                aux.Close();//ya teniendo el laberinto ingresado se cierra el archivo
+
                 //inicializaciones del Punto inicio y punto final
                 //se va a recorrer la matriz entera para definir puntos
-                Punto auxPto1 = new Punto();
-                Punto auxPto2 = new Punto();               
+                Punto auxPto1 = new Punto();//Inicio
+                Punto auxPto2 = new Punto();//Final
                 for (int k=0; k<size; k++)
                 {
                     if (auxlab[k].Contains('A'))
-                    {
+		    {
+			//Sabiendo que A esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
                         auxPto1.i = k;
                         auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
                         this.Inicio= auxPto1;
@@ -80,6 +82,7 @@ namespace Aestrella
                     }
                     if (auxlab[k].Contains('B'))
                     {
+			//Sabiendo que B esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
                         auxPto2.i = k;
                         auxPto2.j = Array.FindIndex(auxlab[k], x => x == 'B');
                         this.Final= auxPto2;
