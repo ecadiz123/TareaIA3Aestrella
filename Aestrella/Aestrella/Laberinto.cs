@@ -26,9 +26,10 @@ namespace Aestrella
          * Siempre debe ser menor igual a costo
          * */
         private char[][]? laberinto;
-        private Punto Inicio;
-        private Punto Final;
-        private Punto Actual;
+        private Punto inicio;
+        private Punto final;
+        private Punto actual;
+	private int costoTotal;
         private int size;//guarda el tamaño en un numero, si es 10, laberinto es 10x10
         public Laberinto(String path)//constructor donde se le entrega solo el path del archivo de entrada
         {
@@ -68,8 +69,8 @@ namespace Aestrella
 
                 //inicializaciones del Punto inicio y punto final
                 //se va a recorrer la matriz entera para definir puntos
-                Punto auxPto1 = new Punto();//Inicio
-                Punto auxPto2 = new Punto();//Final
+                Punto auxPto1 = new Punto();//inicio
+                Punto auxPto2 = new Punto();//final
                 for (int k=0; k<size; k++)
                 {
                     if (auxlab[k].Contains('A'))
@@ -77,17 +78,19 @@ namespace Aestrella
 			//Sabiendo que A esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
                         auxPto1.i = k;
                         auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
-                        this.Inicio= auxPto1;
-                        this.Actual = auxPto1;
+                        this.inicio= auxPto1;
+                        this.actual = auxPto1;
                     }
                     if (auxlab[k].Contains('B'))
                     {
 			//Sabiendo que B esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
                         auxPto2.i = k;
                         auxPto2.j = Array.FindIndex(auxlab[k], x => x == 'B');
-                        this.Final= auxPto2;
+                        this.final= auxPto2;
                     }
                 }
+		this.costoTotal=0;//Al inicio costo deberia ser 0
+
                 
                
 
@@ -95,7 +98,7 @@ namespace Aestrella
             }
 
         }
-        public void printLaberinto()
+        public void printLaberinto()//metodo de prueba usado para printear laberinto
         {
             for (int i = 0; i < size; i++)
             {
@@ -106,8 +109,9 @@ namespace Aestrella
                 Console.WriteLine();
             }
             
-            Console.WriteLine($"Inicio: {Inicio.i},{Inicio.j}");
-            Console.WriteLine($"Final: {Final.i},{Final.j}");
+            Console.WriteLine($"inicio: {inicio.i},{inicio.j}");
+            Console.WriteLine($"final: {final.i},{final.j}");
         }
+	
     }
 }
