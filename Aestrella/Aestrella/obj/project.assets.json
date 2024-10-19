@@ -8,25 +8,32 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/home/Esteban/.nuget/packages/": {}
+    "C:\\Users\\exean\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/Aestrella.csproj",
+      "projectUniqueName": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Aestrella.csproj",
       "projectName": "Aestrella",
-      "projectPath": "/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/Aestrella.csproj",
-      "packagesPath": "/home/Esteban/.nuget/packages/",
-      "outputPath": "/home/Esteban/Documents/InteligenciaArtificial/TareaIA3Aestrella/Aestrella/Aestrella/obj/",
+      "projectPath": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Aestrella.csproj",
+      "packagesPath": "C:\\Users\\exean\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/Esteban/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\exean\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "/home/Esteban/.dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -65,7 +72,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/Esteban/.dotnet/sdk/8.0.402/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
