@@ -19,18 +19,24 @@ namespace Aestrella
             this.j = 0;
         }
     }
+    enum direcciones_t//direcciones guardadas para que despues se impriman
+    {
+	UP,DOWN,LEFT,RIGHT
+    }
     class Laberinto
     {   /*
          * Heuristica: el menor costo en el mejor de los casos, en nuestro caso va a ser cuando
          * no tienes obstaculos. Si heuristica es mayor a costo real, no es admisible.
          * Siempre debe ser menor igual a costo
          * */
-        private char[][]? laberinto;
+        private char[][]? laberinto;//signo de pregunta por si acaso porque StreamReader tiende a tirar valores null cuando no deberia
         private Punto inicio;
         private Punto final;
         private Punto actual;
-	private int costoTotal;
+	private int visitado;//se le va sumando uno por cada nodo que visita
+	private int largo_camino;//es el laargo del camino final
         private int size;//guarda el tamaño en un numero, si es 10, laberinto es 10x10
+	private List<direcciones_t> camino = new List<direcciones_t>();//Se van a guardar donde pasa el camino, agregar cuando visita, eliminar si visita y se devuelve
         public Laberinto(String path)//constructor donde se le entrega solo el path del archivo de entrada
         {
             if (File.Exists(path) == true)//si existe el archivo
@@ -39,13 +45,14 @@ namespace Aestrella
 
                 //Lectura de la primera linea manual
                
-                char[] charaux = aux.ReadLine().ToCharArray();
+                char[] charaux = aux.ReadLine().ToCharArray();//ToCharArray metodo transforma string a arreglo de char
 
 
                 
 
                 int size = charaux.Length;//tamaño obtenido manualmente
-                this.size = size;
+                this.size = size;//
+
                 //como laberintos van a ser cuadrados se usa largo de primera linea
                 //el arreglo es de tipo escalonado o jagged, donde la cantidad de filas
                 //es estatica, pero las columnas son dinamicas, por eso solo se declara las 
@@ -57,7 +64,6 @@ namespace Aestrella
                 {                       
 
                     charaux = aux.ReadLine().ToCharArray();
-                    //inicializacion Pto Inicial
                     
                     
                   
@@ -89,7 +95,10 @@ namespace Aestrella
                         this.final= auxPto2;
                     }
                 }
-		this.costoTotal=0;//Al inicio costo deberia ser 0
+		//Inicializacion Contadores
+		this.visitado=0;
+		this.largo_camino=0;
+
 
                 
                
@@ -111,7 +120,7 @@ namespace Aestrella
             
             Console.WriteLine($"inicio: {inicio.i},{inicio.j}");
             Console.WriteLine($"final: {final.i},{final.j}");
+	    
         }
-	
     }
 }
