@@ -18,6 +18,19 @@ namespace Aestrella
             this.i = 0;
             this.j = 0;
         }
+
+        public Punto(int i, int j)
+        {
+            this.i = i;
+            this.j = j;
+        }
+
+
+
+        public int Manhattan(Punto punto)
+        {
+            return Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
+        }
     }
     class Laberinto
     {   /*
@@ -29,7 +42,7 @@ namespace Aestrella
         private Punto inicio;
         private Punto final;
         private Punto actual;
-	private int costoTotal;
+	    private int costoTotal;
         private int size;//guarda el tamaño en un numero, si es 10, laberinto es 10x10
         public Laberinto(String path)//constructor donde se le entrega solo el path del archivo de entrada
         {
@@ -112,6 +125,35 @@ namespace Aestrella
             Console.WriteLine($"inicio: {inicio.i},{inicio.j}");
             Console.WriteLine($"final: {final.i},{final.j}");
         }
-	
+
+        public bool MovValido(Punto punto)
+        {
+            // Verifica que el siguiente punto al que se quiere mover esté dentro del 
+            // límite establecido por el laberinto (o sea, la matriz).
+            // Si está fuera, entonces retorna falso.
+            if (punto.i >= size) { return false; }
+            else if (punto.j >= size) { return false; }
+            else if (punto.i < 0) { return false; }
+            else if (punto.j < 0) { return false; }
+
+            // Verifica que el siguiente punto no sea un obstáculo, en caso de serlo, 
+            // retorna falso.
+            else if (laberinto[punto.i][punto.j] == '#') { return false; }
+
+            // Si todas las condiciones se cumplen, retorna true, es decir, el movimiento es válido.
+            return true;
+        }
+
+        // Retorna las coordenadas dependiendo de lo que se llame, permitiendo
+        // el movimiento hacia las cuatro direcciones.
+        public Punto Arriba(Punto actual) 
+        { return new Punto(actual.i - 1, actual.j); }
+        public Punto Abajo(Punto actual)
+        { return new Punto(actual.i + 1, actual.j); }
+        public Punto Izquierda(Punto actual)
+        { return new Punto(actual.i, actual.j - 1);}
+        public Punto Derecha(Punto actual)  
+        { return new Punto(actual.i, actual.j + 1); }
+
     }
 }
