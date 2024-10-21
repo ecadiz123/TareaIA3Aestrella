@@ -33,33 +33,38 @@ namespace Aestrella
     internal class Nodo//Clase que se va a usar para guardar los puntos en las listas
     {
         private Punto pto;
-        private int heuristica;
-        private int fTotal;
+        private double heuristica;
+        private double fTotal;
+        //heuristica y Ftotal son double por si llega a haber decimal con calculo de heuristica distinta a Manhattan
         private int costoAcumulado;
         private Nodo? padre;
         public Punto Pto { get => pto; set => pto = value; }
-        public int Heuristica { get => heuristica; set => heuristica = value; }
-        public int FTotal { get => fTotal; set => fTotal = value; }
+        public double Heuristica { get => heuristica; set => heuristica = value; }
+        public double FTotal { get => fTotal; set => fTotal = value; }
         public int CostoAcumulado { get => costoAcumulado; set => costoAcumulado = value; }
         internal Nodo Padre { get => padre; set => padre = value; }
-        public Nodo(Nodo padre, Punto pto, int heuristica)
+        public Nodo(Nodo padre, Punto pto, double heuristica)//Constructor para nodos ingresados despues
         {
             
             this.Pto = pto;//se ingresa manual
             this.Heuristica = heuristica;//se calcula en la clase
             this.Padre = padre;//Se ingresa manual
-            this.FTotal = costoAcumulado+heuristica;
-            this.CostoAcumulado = padre.costoAcumulado+1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
+            this.CostoAcumulado = padre.costoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
+            this.FTotal = Convert.ToDouble(costoAcumulado)+heuristica;
+            
             
         }
-        public Nodo()//Constructor del primer nodo
+        public Nodo(Punto p, double heuristica)//Constructor del primer nodo
         {   
 
-            this.Pto = new Punto();
-            this.Heuristica = 0;
+            this.Pto = p;
+            this.Heuristica = heuristica;
             this.FTotal = 0;
             this.CostoAcumulado = 0;
             this.Padre = null;
         }
+
+
     }
+
 }

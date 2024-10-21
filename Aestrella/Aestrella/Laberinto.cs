@@ -19,7 +19,7 @@ namespace Aestrella
         private char[][]? laberinto;//signo de pregunta por si acaso porque StreamReader tiende a tirar valores null cuando no deberia
         private Punto inicio;
         private Punto final;
-        private Punto actual;
+        private Nodo inicial;
         
         private List<Nodo> entrada= new List<Nodo>();//lista que va a guardar nodos que se van a evaluar
         private List<Nodo> salida = new List<Nodo>();//lista que va a guardar camino final
@@ -76,7 +76,7 @@ namespace Aestrella
                         auxPto1.i = k;
                         auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
                         this.inicio = auxPto1;
-                        this.actual = auxPto1;
+                        
                     }
                     if (auxlab[k].Contains('B'))
                     {
@@ -86,8 +86,8 @@ namespace Aestrella
                         this.final = auxPto2;
                     }
                 }
-                
-              
+                this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial
+
 
 
 
@@ -148,10 +148,10 @@ namespace Aestrella
 
        
         //metodo heuristica manhattan normal
-        private void heuristicaManhattan(Nodo nodo) //metodo que calcula el valor de la heuristica del nodo ingresado y se lo asigna
+        private double heuristicaManhattan(Nodo nodo) //metodo que calcula el valor de la heuristica de Manhattan del nodo ingresado y lo retorna
         {
-            nodo.Heuristica = nodo.Pto.Manhattan(this.final);
-
+            return Convert.ToDouble(nodo.Pto.Manhattan(this.final));
+            
         }
 
         
