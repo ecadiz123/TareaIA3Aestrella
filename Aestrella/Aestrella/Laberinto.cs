@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace Aestrella
 {
-    
+
     enum direcciones_t//direcciones guardadas para que despues se impriman
     {
         UP, DOWN, LEFT, RIGHT
@@ -20,12 +20,13 @@ namespace Aestrella
         private Punto inicio;
         private Punto final;
         private Nodo inicial;
-        
-        private List<Nodo> entrada= new List<Nodo>();//lista que va a guardar nodos que se van a evaluar
+        private Nodo actual;
+
+        private List<Nodo> entrada = new List<Nodo>();//lista que va a guardar nodos que se van a evaluar
         private List<Nodo> salida = new List<Nodo>();//lista que va a guardar camino final
-        
+
         private int size;//guarda el tamaño en un numero, si es 10, laberinto es 10x10
-       
+        private Nodo llegada;
 
         //Metodos
         public Laberinto(String path)//constructor donde se le entrega solo el path del archivo de entrada
@@ -76,7 +77,7 @@ namespace Aestrella
                         auxPto1.i = k;
                         auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
                         this.inicio = auxPto1;
-                        
+
                     }
                     if (auxlab[k].Contains('B'))
                     {
@@ -86,8 +87,9 @@ namespace Aestrella
                         this.final = auxPto2;
                     }
                 }
-                this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial
+                this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial con constructor
 
+                this.actual = this.inicial;
 
 
 
@@ -143,19 +145,161 @@ namespace Aestrella
         { return new Punto(actual.i, actual.j + 1); }
 
 
+        
+        private List<Nodo> vecinosALista(Nodo actual)//metodo que recibe un nodo y revisa que los vecinos de este sean admisibles. Retorna una lista con los vecinos que si lo son
+        {
+            List<Nodo> vecinos = new List<Nodo>();
+            if (MovValido(Arriba(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Arriba(actual.Pto).Manhattan(this.final));
+                vecinos.Add(arriba);
+            }
+            if (MovValido(Abajo(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Abajo(actual.Pto).Manhattan(this.final));
+                vecinos.Add(abajo);
+            }
+            if (MovValido(Izquierda(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Izquierda(actual.Pto).Manhattan(this.final));
+                vecinos.Add(izquierda);
+            }
+            if (MovValido(Derecha(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Derecha(actual.Pto).Manhattan(this.final));
+                vecinos.Add(derecha);
+            }
+            return vecinos;
+        }
 
-       
+        private bool revisaPtoEnLista(Nodo input, List<Nodo> lista)
+        {
+            foreach (Nodo nodo in lista)
+            {
+                if (input.Pto.i == nodo.Pto.i && input.Pto.j == nodo.Pto.j)
+                    return true;
+            }
+            return false;
+        }
 
-       
+
         //metodo heuristica manhattan normal
         private double heuristicaManhattan(Nodo nodo) //metodo que calcula el valor de la heuristica de Manhattan del nodo ingresado y lo retorna
         {
             return Convert.ToDouble(nodo.Pto.Manhattan(this.final));
-            
+
         }
 
-        
-       
-        
+        //metodo que al correr tendra el camino mas corto en salida 
+        public void AestrellaManhattan()
+        {
+            entrada.Add(inicial);//se inicializa la entrada con el nodo inicial
+            Console.WriteLine("inicial añadido");
+            int i = 1;
+            while (entrada[0].Pto.i != this.final.i || entrada[0].Pto.j!=this.final.j)//mientras el punto del nodo actual sea distinto del punto final
+            {
+                Console.WriteLine($"iteracion {i}");
+                
+                foreach (Nodo nodo in entrada)
+                {
+                    Console.WriteLine($"EN ENTRADA: {nodo.Pto.i},{nodo.Pto.j}");
+                }
+                
+                Console.WriteLine($"actual :{entrada[0].Pto.i}, {entrada[0].Pto.j}");
+                actual = entrada[0];//el actual se vuelve el menor de la lista
+               
+                entrada.Remove(actual);//se saca de la lista entrada
+                
+                salida.Add(actual);//se añade a la salida
+                foreach (Nodo nodo in salida)
+                {
+                    Console.WriteLine($"EN SALIDA: {nodo.Pto.i},{nodo.Pto.j}");
+                }
+                    //ahora se revisan los 4 vecinos mediante lista
+
+                //actual pasa por metodo que manda vecinos validos a lista
+                List<Nodo> vecinos = vecinosALista(actual);
+               
+
+                //Se revisan vecinos validos
+                Console.WriteLine($"Se revisan vecinos validos {i}");
+                
+                foreach (Nodo nodovecino in vecinos)
+                {
+                    Console.WriteLine($"Se revisa vecino {nodovecino.Pto.i},{nodovecino.Pto.j}");
+                    if (revisaPtoEnLista(nodovecino, entrada))//si el pto del nodo vecino esta en entrada
+                    {
+                        Console.WriteLine($"si el pto del nodo vecino esta en entrada");
+                        Nodo auxentrada = new Nodo(nodovecino.Pto, nodovecino.Pto.Manhattan(this.final));
+                        auxentrada = entrada.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);//punto del nodo vecino que esta en entrada declarado como variable
+
+                        if (auxentrada.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la entrada que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            entrada.Remove(auxentrada);
+                            Console.WriteLine($"eliminado pto {auxentrada.Pto.i} , {auxentrada.Pto.j}");
+                        }
+
+
+                    }
+                    if (revisaPtoEnLista(nodovecino, salida))//si el pto del nodo vecino esta en salida
+                    {
+                        Console.WriteLine($"si el pto del nodo vecino esta en salida");
+                        Nodo auxsalida = new Nodo(nodovecino.Pto, nodovecino.Pto.Manhattan(this.final));
+                        auxsalida = salida.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j==nodovecino.Pto.j);
+                        if (auxsalida.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la salida que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            salida.Remove(auxsalida);
+                            Console.WriteLine($"eliminado pto {auxsalida.Pto.i} , {auxsalida.Pto.j}");
+
+                        }
+
+
+                    }
+                    if (!revisaPtoEnLista(nodovecino,entrada) && !revisaPtoEnLista(nodovecino,salida))
+                    {
+                        //si el vecino no se encuentra en ninguna de las dos listas es porque no ha sido visitado
+                        //por lo que se agrega a la entrada para que pueda serlo
+                        entrada.Add(nodovecino);
+                        Console.WriteLine("No esta en salida ni en entrada");
+                        Console.WriteLine($"añadido pto {nodovecino.Pto.i} , {nodovecino.Pto.j}");
+                    }
+                    
+                    
+                    
+                }
+                i++;
+                //una vez termina el loop se limpia lista para la siguiente iteracion
+                vecinos.Clear();
+                entrada.Sort((x, y) => x.FTotal.CompareTo(y.FTotal)); //Metodo sort que ordena lista de menor a mayor dependiendo del Ftotal
+                Console.WriteLine($"entrada[0]{entrada[0].Pto.i},{entrada[0].Pto.j}");
+            }
+            Console.WriteLine($"final: {final.i},{final.j}");
+            //salida se ordena de menor a mayor costo
+            this.llegada = entrada[0];
+        }
+        public void printSalida()
+        {
+            //Printeo de lista salida 
+            foreach (Nodo nodo in salida)
+            {
+                Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
+            }
+        }
+        public void printSol()
+        {
+            List<Nodo> solucion = new List<Nodo>();
+            Nodo? aux = llegada;
+            while(aux!=null)
+            {
+                solucion.Add(aux);
+                aux = aux.Padre;
+            }
+            foreach (Nodo nodo in solucion)
+            {
+                Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
+            }
+        }
     }
 }

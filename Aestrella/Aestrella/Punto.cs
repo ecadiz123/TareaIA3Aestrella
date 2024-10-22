@@ -46,22 +46,22 @@ namespace Aestrella
         public Nodo(Nodo padre, Punto pto, double heuristica)//Constructor para nodos ingresados despues
         {
             
-            this.Pto = pto;//se ingresa manual
-            this.Heuristica = heuristica;//se calcula en la clase
-            this.Padre = padre;//Se ingresa manual
-            this.CostoAcumulado = padre.costoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
-            this.FTotal = Convert.ToDouble(costoAcumulado)+heuristica;
+            this.pto = pto;//se ingresa manual
+            this.heuristica = heuristica;//se calcula en la clase
+            this.padre = padre;//Se ingresa manual
+            this.costoAcumulado = padre.costoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
+            this.fTotal = Convert.ToDouble(costoAcumulado)+heuristica;
             
             
         }
         public Nodo(Punto p, double heuristica)//Constructor del primer nodo
         {   
 
-            this.Pto = p;
-            this.Heuristica = heuristica;
-            this.FTotal = 0;
-            this.CostoAcumulado = 0;
-            this.Padre = null;
+            this.pto = p;
+            this.heuristica = heuristica;
+            this.fTotal = heuristica;
+            this.costoAcumulado = 0;
+            this.padre = null;
         }
 
 
