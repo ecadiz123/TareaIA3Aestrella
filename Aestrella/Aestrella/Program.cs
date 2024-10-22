@@ -8,3 +8,4 @@ labprueba.printLaberinto();
 labprueba.AestrellaManhattan();
 
 labprueba.printSol();
+labprueba.printLaberinto();

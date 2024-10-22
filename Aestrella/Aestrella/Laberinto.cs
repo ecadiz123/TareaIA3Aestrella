@@ -183,12 +183,7 @@ namespace Aestrella
         }
 
 
-        //metodo heuristica manhattan normal
-        private double heuristicaManhattan(Nodo nodo) //metodo que calcula el valor de la heuristica de Manhattan del nodo ingresado y lo retorna
-        {
-            return Convert.ToDouble(nodo.Pto.Manhattan(this.final));
-
-        }
+       
 
         //metodo que al correr tendra el camino mas corto en salida 
         public void AestrellaManhattan()
@@ -252,7 +247,7 @@ namespace Aestrella
                         //si el vecino no se encuentra en ninguna de las dos listas es porque no ha sido visitado
                         //por lo que se agrega a la entrada para que pueda serlo
                         entrada.Add(nodovecino);
-                        ;
+                        
                     }
                     
                     
@@ -285,10 +280,15 @@ namespace Aestrella
                 solucion.Add(aux);
                 aux = aux.Padre;
             }
+
             foreach (Nodo nodo in solucion)
             {
                 Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
+                if(laberinto[nodo.Pto.i][nodo.Pto.j]!='A')
+                laberinto[nodo.Pto.i][nodo.Pto.j] = 'X';//CARACTER QUE VA A HACER CAMINO
             }
+            Console.WriteLine($"Nodos visitados: {salida.Count}");
+            Console.WriteLine($"Costo final: {solucion.Count}");
         }
     }
 }
