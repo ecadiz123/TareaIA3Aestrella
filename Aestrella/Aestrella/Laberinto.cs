@@ -87,9 +87,7 @@ namespace Aestrella
                         this.final = auxPto2;
                     }
                 }
-                this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial con constructor
-
-                this.actual = this.inicial;
+                
 
 
 
@@ -188,6 +186,11 @@ namespace Aestrella
         //metodo que al correr tendra el camino mas corto en salida 
         public void AestrellaManhattan()
         {
+            //inicializacion de nodos con heuristica de Manhattan
+            this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial con constructor
+
+            this.actual = this.inicial;
+
 
             entrada.Add(inicial);//se inicializa la entrada con el nodo inicial
             int i = 1;
@@ -279,6 +282,134 @@ namespace Aestrella
             this.solucion.Reverse();
 
         }
+        //metodo que envia vecinos a lista copiado y pegado pero con heuristica cambiada
+        private List<Nodo> vecinosAListaAlt(Nodo actual)//metodo que recibe un nodo y revisa que los vecinos de este sean admisibles. Retorna una lista con los vecinos que si lo son
+        {
+            List<Nodo> vecinos = new List<Nodo>();
+            if (MovValido(Arriba(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Arriba(actual.Pto).heuristicaAlt(this.final));
+                vecinos.Add(arriba);
+            }
+            if (MovValido(Abajo(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Abajo(actual.Pto).heuristicaAlt(this.final));
+                vecinos.Add(abajo);
+            }
+            if (MovValido(Izquierda(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Izquierda(actual.Pto).heuristicaAlt(this.final));
+                vecinos.Add(izquierda);
+            }
+            if (MovValido(Derecha(actual.Pto)))
+            {   //si es valido se crea como nodo y se agrega
+                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Derecha(actual.Pto).heuristicaAlt(this.final));
+                vecinos.Add(derecha);
+            }
+            return vecinos;
+        }
+
+        //Metodo heuristica alternativa, copiado y pegado del Manhattan con calculo de heuristica cambiado
+
+        public void AestrellaHeuristicaAlt()
+        {
+            
+            this.inicial = new Nodo(this.inicio, this.inicio.heuristicaAlt(this.final));//Se inicializa nodo inicial con constructor
+
+            this.actual = this.inicial;
+
+
+            entrada.Add(inicial);//se inicializa la entrada con el nodo inicial
+            int i = 1;
+
+            while (entrada[0].Pto.i != this.final.i || entrada[0].Pto.j != this.final.j)//mientras el punto del nodo actual sea distinto del punto final
+            {
+                //Console.WriteLine($"iteracion {i}"); //un contador de iteraciones para asegurarse que el programa esté corriendo en laberintos mas grandes
+                i++;
+                actual = entrada[0];//el actual se vuelve el menor de la lista
+
+                entrada.Remove(actual);//se saca de la lista entrada
+
+                salida.Add(actual);//se añade a la salida
+
+                //ahora se revisan los 4 vecinos mediante lista
+
+                
+                List<Nodo> vecinos = vecinosAListaAlt(actual);//METODO VECINO A LISTA CAMBIADO POR EL DE HEURISTICA CORRESPONDIENTE
+
+
+                //Se revisan vecinos validos
+
+
+                foreach (Nodo nodovecino in vecinos)
+                {
+
+                    if (revisaPtoEnLista(nodovecino, entrada))//si el pto del nodo vecino esta en entrada
+                    {
+
+                        Nodo auxentrada = new Nodo(nodovecino.Pto, nodovecino.Pto.heuristicaAlt(this.final));
+                        auxentrada = entrada.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);//punto del nodo vecino que esta en entrada declarado como variable
+
+                        if (auxentrada.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la entrada que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            entrada.Remove(auxentrada);
+
+                        }
+
+
+                    }
+                    if (revisaPtoEnLista(nodovecino, salida))//si el pto del nodo vecino esta en salida
+                    {
+
+                        Nodo auxsalida = new Nodo(nodovecino.Pto, nodovecino.Pto.heuristicaAlt(this.final));
+                        auxsalida = salida.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);
+                        if (auxsalida.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la salida que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            salida.Remove(auxsalida);
+
+
+                        }
+
+
+                    }
+                    if (!revisaPtoEnLista(nodovecino, entrada) && !revisaPtoEnLista(nodovecino, salida))
+                    {
+                        //si el vecino no se encuentra en ninguna de las dos listas es porque no ha sido visitado
+                        //por lo que se agrega a la entrada para que pueda serlo
+                        entrada.Add(nodovecino);
+
+                    }
+
+
+
+                }
+
+                //una vez termina el loop se limpia lista para la siguiente iteracion
+                vecinos.Clear();
+
+
+            }
+
+
+            this.llegada = entrada[0];//El while termina una vez  entrada[0] es el pto final,
+                                      //del cual se puede encontrar el camino mas corto siguiendo el padre hasta el inicio
+
+            //Donde se guarda camino mas corto a solucion en lista
+            Nodo? aux = this.llegada;
+            while (aux != null)
+            {
+                this.solucion.Add(aux);
+                aux = aux.Padre;
+            }
+            //Por la manera en que se ingresaron los datos
+            //la lista esta del nodo final al inicial, entonces se invierte
+            //para que comience del primer nodo
+            this.solucion.Reverse();
+
+        }
+
         public void printSalida()
         {
             //Printeo de lista salida de nodos visitados
@@ -303,6 +434,7 @@ namespace Aestrella
         public void printLaberintoCamino()
         {
             char[][] labaux = this.laberinto;//se hace un laberinto auxiliar
+            //se hace camino en todos los nodos de solucion excepto por A y B
             foreach (Nodo nodo in solucion)
             {
                 if (!(nodo == solucion.Last() || nodo == solucion[0]))//condicion para que no se reemplazen A y B
@@ -320,6 +452,10 @@ namespace Aestrella
 
             Console.WriteLine($"Nodos salida: {salida.Count}");//nodos salida: nodos visitados por el algoritmo
             Console.WriteLine($"Costo final: {solucion.Count - 1}");//Costo final es cantidad solucion - 1 porque no hay que contar el nodo inicial
+        }
+        public void printFormatoProfe()
+        {
+
         }
     }
 }

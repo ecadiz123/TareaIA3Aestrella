@@ -5,7 +5,22 @@ Console.WriteLine("Ingresar nombre archivo");
 pathrelativo += Console.ReadLine();
 Laberinto labprueba= new Laberinto(pathrelativo);
 
-labprueba.AestrellaManhattan();
+Console.WriteLine("Elija Heuristica a utilizar:");
+Console.WriteLine("1. Manhattan");
+Console.WriteLine("2. Alternativa");
+int x;
+x=int.Parse(Console.ReadLine());
+switch (x)
+{
+    case 1:
+        labprueba.AestrellaManhattan();
+        break;
+    case 2:
+        labprueba.AestrellaHeuristicaAlt();
+        break;
+   
+
+}
 
 labprueba.printNodosSol();
 labprueba.printLaberintoCamino();

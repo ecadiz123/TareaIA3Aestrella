@@ -29,6 +29,12 @@ namespace Aestrella
         {
             return Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
         }
+        public double heuristicaAlt(Punto punto)
+        {
+            //return Math.Sqrt(Math.Pow((this.i-punto.i), 2)+ Math.Pow((this.j - punto.j), 2));
+            return 0.3*Manhattan(punto);
+        }
+
     }
     internal class Nodo//Clase que se va a usar para guardar los puntos en las listas
     {
