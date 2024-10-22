@@ -22,9 +22,9 @@ namespace Aestrella
         private Nodo inicial;
         private Nodo actual;
 
-        private List<Nodo> entrada = new List<Nodo>();//lista que va a guardar nodos que se van a evaluar
-        private List<Nodo> salida = new List<Nodo>();//lista que va a guardar camino final
-
+        private List<Nodo> entrada = new List<Nodo>();//lista que va a guardar nodos a visitar
+        private List<Nodo> salida = new List<Nodo>();//lista que va a guardar nodos visitados
+        private List<Nodo> solucion = new List<Nodo>();//Donde se va a guardar nodos de camino mas corto partiendo del inicio al final
         private int size;//guarda el tamaño en un numero, si es 10, laberinto es 10x10
         private Nodo llegada;
 
@@ -145,7 +145,7 @@ namespace Aestrella
         { return new Punto(actual.i, actual.j + 1); }
 
 
-        
+
         private List<Nodo> vecinosALista(Nodo actual)//metodo que recibe un nodo y revisa que los vecinos de este sean admisibles. Retorna una lista con los vecinos que si lo son
         {
             List<Nodo> vecinos = new List<Nodo>();
@@ -183,38 +183,40 @@ namespace Aestrella
         }
 
 
-       
+
 
         //metodo que al correr tendra el camino mas corto en salida 
         public void AestrellaManhattan()
         {
+
             entrada.Add(inicial);//se inicializa la entrada con el nodo inicial
-           
-            while (entrada[0].Pto.i != this.final.i || entrada[0].Pto.j!=this.final.j)//mientras el punto del nodo actual sea distinto del punto final
+            int i = 1;
+
+            while (entrada[0].Pto.i != this.final.i || entrada[0].Pto.j != this.final.j)//mientras el punto del nodo actual sea distinto del punto final
             {
-                
-                
+                //Console.WriteLine($"iteracion {i}"); //un contador de iteraciones para asegurarse que el programa esté corriendo en laberintos mas grandes
+                i++;
                 actual = entrada[0];//el actual se vuelve el menor de la lista
-               
+
                 entrada.Remove(actual);//se saca de la lista entrada
-                
+
                 salida.Add(actual);//se añade a la salida
-               
-                    //ahora se revisan los 4 vecinos mediante lista
+
+                //ahora se revisan los 4 vecinos mediante lista
 
                 //actual pasa por metodo que manda vecinos validos a lista
                 List<Nodo> vecinos = vecinosALista(actual);
-               
+
 
                 //Se revisan vecinos validos
-                
-                
+
+
                 foreach (Nodo nodovecino in vecinos)
                 {
-                    
+
                     if (revisaPtoEnLista(nodovecino, entrada))//si el pto del nodo vecino esta en entrada
                     {
-                        
+
                         Nodo auxentrada = new Nodo(nodovecino.Pto, nodovecino.Pto.Manhattan(this.final));
                         auxentrada = entrada.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);//punto del nodo vecino que esta en entrada declarado como variable
 
@@ -222,73 +224,102 @@ namespace Aestrella
                         {
                             //Se elimina porque que cuesta mas
                             entrada.Remove(auxentrada);
-                            
+
                         }
 
 
                     }
                     if (revisaPtoEnLista(nodovecino, salida))//si el pto del nodo vecino esta en salida
                     {
-                        
+
                         Nodo auxsalida = new Nodo(nodovecino.Pto, nodovecino.Pto.Manhattan(this.final));
-                        auxsalida = salida.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j==nodovecino.Pto.j);
+                        auxsalida = salida.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);
                         if (auxsalida.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la salida que tiene el mismo punto que el vecino tenga mayor costo
                         {
                             //Se elimina porque que cuesta mas
                             salida.Remove(auxsalida);
-                            
+
 
                         }
 
 
                     }
-                    if (!revisaPtoEnLista(nodovecino,entrada) && !revisaPtoEnLista(nodovecino,salida))
+                    if (!revisaPtoEnLista(nodovecino, entrada) && !revisaPtoEnLista(nodovecino, salida))
                     {
                         //si el vecino no se encuentra en ninguna de las dos listas es porque no ha sido visitado
                         //por lo que se agrega a la entrada para que pueda serlo
                         entrada.Add(nodovecino);
-                        
+
                     }
-                    
-                    
-                    
+
+
+
                 }
-         
+
                 //una vez termina el loop se limpia lista para la siguiente iteracion
                 vecinos.Clear();
-                entrada.Sort((x, y) => x.FTotal.CompareTo(y.FTotal)); //Metodo sort que ordena lista de menor a mayor dependiendo del Ftotal
-                
+
+
             }
-            
-            //salida se ordena de menor a mayor costo
-            this.llegada = entrada[0];
+
+
+            this.llegada = entrada[0];//El while termina una vez  entrada[0] es el pto final,
+                                      //del cual se puede encontrar el camino mas corto siguiendo el padre hasta el inicio
+
+            //Donde se guarda camino mas corto a solucion en lista
+            Nodo? aux = this.llegada;
+            while (aux != null)
+            {
+                this.solucion.Add(aux);
+                aux = aux.Padre;
+            }
+            //Por la manera en que se ingresaron los datos
+            //la lista esta del nodo final al inicial, entonces se invierte
+            //para que comience del primer nodo
+            this.solucion.Reverse();
+
         }
         public void printSalida()
         {
-            //Printeo de lista salida 
+            //Printeo de lista salida de nodos visitados
             foreach (Nodo nodo in salida)
             {
                 Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
             }
         }
-        public void printSol()
-        {
-            List<Nodo> solucion = new List<Nodo>();
-            Nodo? aux = llegada;
-            while(aux!=null)
-            {
-                solucion.Add(aux);
-                aux = aux.Padre;
-            }
 
+        public void printNodosSol()
+        {
+            //printeo de lista con camino al mas corto
             foreach (Nodo nodo in solucion)
             {
                 Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
-                if(laberinto[nodo.Pto.i][nodo.Pto.j]!='A')
-                laberinto[nodo.Pto.i][nodo.Pto.j] = 'X';//CARACTER QUE VA A HACER CAMINO
+
             }
-            Console.WriteLine($"Nodos visitados: {salida.Count}");
-            Console.WriteLine($"Costo final: {solucion.Count}");
+
+            Console.WriteLine($"Nodos salida: {salida.Count}");//nodos salida: nodos visitados por el algoritmo
+            Console.WriteLine($"Costo final: {solucion.Count - 1}");//Costo final es cantidad solucion - 1 porque no hay que contar el nodo inicial
+        }
+        public void printLaberintoCamino()
+        {
+            char[][] labaux = this.laberinto;//se hace un laberinto auxiliar
+            foreach (Nodo nodo in solucion)
+            {
+                if (!(nodo == solucion.Last() || nodo == solucion[0]))//condicion para que no se reemplazen A y B
+                    labaux[nodo.Pto.i][nodo.Pto.j] = 'x';//caracter del cual se va a hacer el camino
+            }
+            //copiado y pegado del metodo printLaberinto
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    Console.Write(labaux[i][j]);
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"Nodos salida: {salida.Count}");//nodos salida: nodos visitados por el algoritmo
+            Console.WriteLine($"Costo final: {solucion.Count - 1}");//Costo final es cantidad solucion - 1 porque no hay que contar el nodo inicial
         }
     }
 }

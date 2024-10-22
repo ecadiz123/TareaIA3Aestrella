@@ -4,8 +4,8 @@ string pathrelativo = @"../../../Laberintos/";
 Console.WriteLine("Ingresar nombre archivo");
 pathrelativo += Console.ReadLine();
 Laberinto labprueba= new Laberinto(pathrelativo);
-labprueba.printLaberinto();
+
 labprueba.AestrellaManhattan();
 
-labprueba.printSol();
-labprueba.printLaberinto();
+labprueba.printNodosSol();
+labprueba.printLaberintoCamino();
