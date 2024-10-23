@@ -29,12 +29,12 @@ namespace Aestrella
         {
             return Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
         }
-        public double heuristicaAlt(Punto punto)
-        {
-            //return Math.Sqrt(Math.Pow((this.i-punto.i), 2)+ Math.Pow((this.j - punto.j), 2));
-            return 0.3*Manhattan(punto);
-        }
 
+        public double ManhattanEscalado(Punto punto)
+        {
+            double distanciaManhattan = Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
+            return distanciaManhattan * 0.3;
+        }
     }
     internal class Nodo//Clase que se va a usar para guardar los puntos en las listas
     {
@@ -44,17 +44,27 @@ namespace Aestrella
         //heuristica y Ftotal son double por si llega a haber decimal con calculo de heuristica distinta a Manhattan
         private int costoAcumulado;
         private Nodo? padre;
-        public Punto Pto { get => pto; set => pto = value; }
+
+        private direcciones_t? direccion;
+
+        public Punto Pto
+        { get => pto; set => pto = value; }
         public double Heuristica { get => heuristica; set => heuristica = value; }
-        public double FTotal { get => fTotal; set => fTotal = value; }
-        public int CostoAcumulado { get => costoAcumulado; set => costoAcumulado = value; }
-        internal Nodo Padre { get => padre; set => padre = value; }
-        public Nodo(Nodo padre, Punto pto, double heuristica)//Constructor para nodos ingresados despues
+        public double FTotal 
+        { get => fTotal; set => fTotal = value; }
+        public int CostoAcumulado
+        { get => costoAcumulado; set => costoAcumulado = value; }
+        internal Nodo Padre 
+        { get => padre; set => padre = value; }
+        internal direcciones_t? Direccion
+        { get => direccion; set => direccion = value; }
+        public Nodo(Nodo padre, Punto pto, double heuristica, direcciones_t direccion)//Constructor para nodos ingresados despues
         {
             
             this.pto = pto;//se ingresa manual
             this.heuristica = heuristica;//se calcula en la clase
             this.padre = padre;//Se ingresa manual
+            this.direccion = direccion;
             this.costoAcumulado = padre.costoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
             this.fTotal = Convert.ToDouble(costoAcumulado)+heuristica;
             
@@ -68,6 +78,7 @@ namespace Aestrella
             this.fTotal = heuristica;
             this.costoAcumulado = 0;
             this.padre = null;
+            this.direccion = null;
         }
 
 
