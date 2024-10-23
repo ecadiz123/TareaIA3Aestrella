@@ -1,13 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\pc0105\\Desktop\\IA\\Aestrella\\",
+  "WorkspaceRootPath": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|c:\\users\\pc0105\\desktop\\ia\\aestrella\\aestrella\\laberinto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|c:\\users\\exean\\desktop\\tareaia3aestrella\\aestrella\\aestrella\\punto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|solutionrelative:aestrella\\punto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|c:\\users\\exean\\desktop\\tareaia3aestrella\\aestrella\\aestrella\\laberinto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|solutionrelative:aestrella\\laberinto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|c:\\users\\pc0105\\desktop\\ia\\aestrella\\aestrella\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|c:\\users\\exean\\desktop\\tareaia3aestrella\\aestrella\\aestrella\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FC37D163-6353-4388-84C0-023070F9C54C}|Aestrella\\Aestrella.csproj|solutionrelative:aestrella\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -18,37 +22,46 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Laberinto.cs",
-              "DocumentMoniker": "C:\\Users\\pc0105\\Desktop\\IA\\Aestrella\\Aestrella\\Laberinto.cs",
-              "RelativeDocumentMoniker": "Aestrella\\Laberinto.cs",
-              "ToolTip": "C:\\Users\\pc0105\\Desktop\\IA\\Aestrella\\Aestrella\\Laberinto.cs",
-              "RelativeToolTip": "Aestrella\\Laberinto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Program.cs",
+              "RelativeDocumentMoniker": "Aestrella\\Program.cs",
+              "ToolTip": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Program.cs",
+              "RelativeToolTip": "Aestrella\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-11T20:17:11.366Z",
+              "WhenOpened": "2024-10-22T23:40:24.594Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Punto.cs",
+              "DocumentMoniker": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Punto.cs",
+              "RelativeDocumentMoniker": "Aestrella\\Punto.cs",
+              "ToolTip": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Punto.cs",
+              "RelativeToolTip": "Aestrella\\Punto.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACMAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T15:34:25.26Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\pc0105\\Desktop\\IA\\Aestrella\\Aestrella\\Program.cs",
-              "RelativeDocumentMoniker": "Aestrella\\Program.cs",
-              "ToolTip": "C:\\Users\\pc0105\\Desktop\\IA\\Aestrella\\Aestrella\\Program.cs",
-              "RelativeToolTip": "Aestrella\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "Laberinto.cs",
+              "DocumentMoniker": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Laberinto.cs",
+              "RelativeDocumentMoniker": "Aestrella\\Laberinto.cs",
+              "ToolTip": "C:\\Users\\exean\\Desktop\\TareaIA3Aestrella\\Aestrella\\Aestrella\\Laberinto.cs",
+              "RelativeToolTip": "Aestrella\\Laberinto.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAADcBAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-11T19:54:51.9Z",
+              "WhenOpened": "2024-10-20T16:22:01.684Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }

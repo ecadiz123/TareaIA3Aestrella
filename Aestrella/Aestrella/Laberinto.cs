@@ -101,6 +101,7 @@ namespace Aestrella
         }
         public void printLaberinto()//metodo de prueba usado para printear laberinto
         {
+            Console.WriteLine();
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
@@ -110,8 +111,9 @@ namespace Aestrella
                 Console.WriteLine();
             }
 
-            Console.WriteLine($"inicio: {inicio.i},{inicio.j}");
-            Console.WriteLine($"final: {final.i},{final.j}");
+            Console.WriteLine();
+            Console.WriteLine($"\n[Inicio]: ({inicio.i},{inicio.j})");
+            Console.WriteLine($"[Final]: ({final.i},{final.j})\n");
 
         }
 
@@ -151,22 +153,22 @@ namespace Aestrella
             List<Nodo> vecinos = new List<Nodo>();
             if (MovValido(Arriba(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Arriba(actual.Pto).Manhattan(this.final));
-                vecinos.Add(arriba);
+                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Arriba(actual.Pto).Manhattan(this.final), direcciones_t.UP);
+                vecinos.Add(arriba);                                                                                                                    
             }
             if (MovValido(Abajo(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Abajo(actual.Pto).Manhattan(this.final));
+                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Abajo(actual.Pto).Manhattan(this.final), direcciones_t.DOWN);
                 vecinos.Add(abajo);
             }
             if (MovValido(Izquierda(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Izquierda(actual.Pto).Manhattan(this.final));
+                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Izquierda(actual.Pto).Manhattan(this.final), direcciones_t.LEFT);
                 vecinos.Add(izquierda);
             }
             if (MovValido(Derecha(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Derecha(actual.Pto).Manhattan(this.final));
+                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Derecha(actual.Pto).Manhattan(this.final), direcciones_t.RIGHT);
                 vecinos.Add(derecha);
             }
             return vecinos;
@@ -263,12 +265,92 @@ namespace Aestrella
             //salida se ordena de menor a mayor costo
             this.llegada = entrada[0];
         }
+
+
+        public void AestrellaEscalada()
+        {
+            entrada.Add(inicial);//se inicializa la entrada con el nodo inicial
+
+            while (entrada[0].Pto.i != this.final.i || entrada[0].Pto.j != this.final.j)//mientras el punto del nodo actual sea distinto del punto final
+            {
+
+
+                actual = entrada[0];//el actual se vuelve el menor de la lista
+
+                entrada.Remove(actual);//se saca de la lista entrada
+
+                salida.Add(actual);//se añade a la salida
+
+                //ahora se revisan los 4 vecinos mediante lista
+
+                //actual pasa por metodo que manda vecinos validos a lista
+                List<Nodo> vecinos = vecinosALista(actual);
+
+
+                //Se revisan vecinos validos
+
+
+                foreach (Nodo nodovecino in vecinos)
+                {
+
+                    if (revisaPtoEnLista(nodovecino, entrada))//si el pto del nodo vecino esta en entrada
+                    {
+
+                        Nodo auxentrada = new Nodo(nodovecino.Pto, nodovecino.Pto.ManhattanEscalado(this.final));
+                        auxentrada = entrada.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);//punto del nodo vecino que esta en entrada declarado como variable
+
+                        if (auxentrada.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la entrada que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            entrada.Remove(auxentrada);
+
+                        }
+
+
+                    }
+                    if (revisaPtoEnLista(nodovecino, salida))//si el pto del nodo vecino esta en salida
+                    {
+
+                        Nodo auxsalida = new Nodo(nodovecino.Pto, nodovecino.Pto.ManhattanEscalado(this.final));
+                        auxsalida = salida.Find(x => x.Pto.i == nodovecino.Pto.i && x.Pto.j == nodovecino.Pto.j);
+                        if (auxsalida.CostoAcumulado > nodovecino.CostoAcumulado)//En el caso de que el nodo de la salida que tiene el mismo punto que el vecino tenga mayor costo
+                        {
+                            //Se elimina porque que cuesta mas
+                            salida.Remove(auxsalida);
+
+
+                        }
+
+
+                    }
+                    if (!revisaPtoEnLista(nodovecino, entrada) && !revisaPtoEnLista(nodovecino, salida))
+                    {
+                        //si el vecino no se encuentra en ninguna de las dos listas es porque no ha sido visitado
+                        //por lo que se agrega a la entrada para que pueda serlo
+                        entrada.Add(nodovecino);
+
+                    }
+
+
+
+                }
+
+                //una vez termina el loop se limpia lista para la siguiente iteracion
+                vecinos.Clear();
+                entrada.Sort((x, y) => x.FTotal.CompareTo(y.FTotal)); //Metodo sort que ordena lista de menor a mayor dependiendo del Ftotal
+
+            }
+
+            //salida se ordena de menor a mayor costo
+            this.llegada = entrada[0];
+        }
+
         public void printSalida()
         {
             //Printeo de lista salida 
             foreach (Nodo nodo in salida)
             {
-                Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
+                Console.WriteLine($"[Punto]: ({nodo.Pto.i},{nodo.Pto.j})");
             }
         }
         public void printSol()
@@ -281,14 +363,25 @@ namespace Aestrella
                 aux = aux.Padre;
             }
 
+            solucion.Reverse(); // Se hace el reverso para poder printear en orden.
+
             foreach (Nodo nodo in solucion)
             {
-                Console.WriteLine($"punto: {nodo.Pto.i},{nodo.Pto.j}");
-                if(laberinto[nodo.Pto.i][nodo.Pto.j]!='A')
+                if (nodo.Direccion.HasValue)
+                {
+                    Console.WriteLine($"[Punto]: ({nodo.Pto.i},{nodo.Pto.j}) || [Dirección]: {nodo.Direccion}");
+                }
+                else
+                {
+                    Console.WriteLine($"[Punto inicial]: ({nodo.Pto.i},{nodo.Pto.j})\n");
+                }
+
+                if(laberinto[nodo.Pto.i][nodo.Pto.j]!='A' && laberinto[nodo.Pto.i][nodo.Pto.j] != 'B')
                 laberinto[nodo.Pto.i][nodo.Pto.j] = 'X';//CARACTER QUE VA A HACER CAMINO
             }
-            Console.WriteLine($"Nodos visitados: {salida.Count}");
-            Console.WriteLine($"Costo final: {solucion.Count}");
+            Console.WriteLine();
+            Console.WriteLine($"[Nodos visitados]: {salida.Count} nodos.");
+            Console.WriteLine($"[Costo final]: {solucion.Count}");
         }
     }
 }

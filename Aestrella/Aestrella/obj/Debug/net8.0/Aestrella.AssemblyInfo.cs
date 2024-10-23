@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aestrella")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0e31ba2409e9199c3097f227b621e9ee0143bed")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c96d8c038e2b2daedff48bbd83f7f01659140ef9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aestrella")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aestrella")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
