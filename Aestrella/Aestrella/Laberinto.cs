@@ -196,8 +196,7 @@ namespace Aestrella
             {
 
                 actual = menorF.Dequeue();//el actual se vuelve el con menor F
-                Console.WriteLine($"ACTUAL:{actual.Pto.i} {actual.Pto.j} \n");
-
+               
                 if (actual.Pto.Equals(this.final))
                     break;
 
@@ -217,7 +216,6 @@ namespace Aestrella
                 {
                     if (nodovecino != null)//Chequeo importante, ya que por funcion vecionosAArreglo, si el vecino no se puede acceder, el valor es null
                     {
-                        Console.WriteLine($"Revisa Vecino:{nodovecino.Pto.i} {nodovecino.Pto.j}");
                         if (entrada.ContainsKey(nodovecino.Pto))
                         {
                             Nodo auxentrada = entrada[nodovecino.Pto];
@@ -225,7 +223,6 @@ namespace Aestrella
                             {
                                 //Se elimina de la entrada porque cuesta mas que el vecino
                                 entrada.Remove(auxentrada.Pto);
-                                Console.WriteLine($"Saca Vecino entrada:{nodovecino.Pto.i} {nodovecino.Pto.j}");
 
                             }
 
@@ -239,7 +236,6 @@ namespace Aestrella
                                 //Se elimina de la entrada porque cuesta mas que el vecino
                                 entrada.Remove(auxsalida.Pto);
 
-                                Console.WriteLine($"Saca Vecino salida:{nodovecino.Pto.i} {nodovecino.Pto.j}");
                             }
 
 
@@ -251,7 +247,6 @@ namespace Aestrella
                             entrada.Add(nodovecino.Pto, nodovecino);
                             //Ademas se agrega a la fila que se ordena por prioridad
                             menorF.Enqueue(nodovecino, nodovecino.FTotal);
-                            Console.WriteLine($"\nañade vecino a entrada:{nodovecino.Pto.i} {nodovecino.Pto.j}\n");
                             /*Nota sobre la fila ordenada por prioridad:
                              * 
                              * Esta podria llegar a contener dos puntos iguales pero con distinta Ftotal
@@ -311,6 +306,10 @@ namespace Aestrella
 
             }
 
+          
+        }
+        public void printNumNodos()
+        {
             Console.WriteLine($"Nodos salida: {salida.Count}");//nodos salida: nodos visitados por el algoritmo
             Console.WriteLine($"Costo final: {solucion.Count - 1}");//Costo final es cantidad solucion - 1 porque no hay que contar el nodo inicial
         }

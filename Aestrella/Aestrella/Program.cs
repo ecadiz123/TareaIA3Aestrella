@@ -21,4 +21,3 @@ switch (x)
 }
 
 labprueba.printNodosSol();
-labprueba.printLaberintoCamino();
