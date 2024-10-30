@@ -22,10 +22,26 @@ namespace Aestrella
             this.i = i;
             this.j = j;
         }
+        //Metodos usados por el diccionario para trabajar con indices
+        public override bool Equals(object? obj)
+        {   
+            var input= obj as Punto;//Se va a tomar obj como un punto mediane la variable input
+            if(input.i==this.i && input.j==this.j)
+                return true;
+            else
+                return false;
 
+        }
+        public override int GetHashCode()
+        {
+            return this.i.GetHashCode() ^ this.j.GetHashCode();//operacion hecha para que sean distintos los valores de cada elemento
+                                                                // Es una operacion que trabaja con el valor binario de los enteros 
+                                                                //Nos sirve porque entrega numeros distintos rapido
+        }
 
+    
 
-        public int Manhattan(Punto punto)
+    public int Manhattan(Punto punto)
         {
             return Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
         }
@@ -69,7 +85,15 @@ namespace Aestrella
             this.costoAcumulado = 0;
             this.padre = null;
         }
-
+        public Nodo()//Inicializacion de nodo vacio por si acaso se necesita
+        {
+            this.padre = null;
+            this.pto = new Punto();
+            this.heuristica = 0;
+            this.costoAcumulado= 0;
+            this.fTotal = 0;
+            
+           }
 
     }
 

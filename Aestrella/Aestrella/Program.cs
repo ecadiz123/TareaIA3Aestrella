@@ -15,9 +15,7 @@ switch (x)
     case 1:
         labprueba.AestrellaManhattan();
         break;
-    case 2:
-        labprueba.AestrellaHeuristicaAlt();
-        break;
+   
    
 
 }
