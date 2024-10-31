@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Aestrella
 {
-    internal class Punto//Clase Puntos para facilitar trabajo con indice 2D
+    internal struct Punto//Clase Puntos para facilitar trabajo con indice 2D
     {   //pensado como matriz donde
         //i=fila j=columna
         public int i;
@@ -23,13 +24,16 @@ namespace Aestrella
             this.j = j;
         }
         //Metodos usados por el diccionario para trabajar con indices
-        public override bool Equals(object? obj)
-        {   
-            var input= obj as Punto;//Se va a tomar obj como un punto mediane la variable input
-            if(input.i==this.i && input.j==this.j)
-                return true;
-            else
-                return false;
+        public override bool Equals([NotNullWhen(true)] object? obj)
+        {
+                  
+            if(obj is Punto input)
+            {
+               if(input.i==this.i && input.j==this.j)
+                    return true;
+            }
+            
+            return false;
 
         }
         public override int GetHashCode()
@@ -41,15 +45,7 @@ namespace Aestrella
 
     
 
-    public int Manhattan(Punto punto)
-        {
-            return Math.Abs(this.i - punto.i) + Math.Abs(this.j - punto.j);
-        }
-        public double heuristicaAlt(Punto punto)
-        {
-            //return Math.Sqrt(Math.Pow((this.i-punto.i), 2)+ Math.Pow((this.j - punto.j), 2));
-            return 0.3*Manhattan(punto);
-        }
+   
 
     }
     internal class Nodo//Clase que se va a usar para guardar los puntos en las listas

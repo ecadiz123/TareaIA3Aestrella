@@ -142,28 +142,36 @@ namespace Aestrella
         { return new Punto(actual.i, actual.j + 1); }
 
 
+        public int Manhattan(Punto puntoInicial, Punto puntoFinal)
+        {
+            return Math.Abs(puntoInicial.i - puntoFinal.i ) + Math.Abs(puntoInicial.j - puntoFinal.j);
+        }
+        public double heuristicaAlt(Punto puntoInicial, Punto puntoFinal)
+        {
+            return 0.3 * Manhattan(puntoInicial,puntoFinal);
 
+        }
         private Nodo[]? vecinosAArreglo(Nodo actual) 
         {
             Nodo[] vecinos = new Nodo[4];//Arreglo de tamaño maximo 4
             if (MovValido(Arriba(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Arriba(actual.Pto).Manhattan(this.final));
+                Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Manhattan(Arriba(actual.Pto),this.final));
                 vecinos[0]=arriba;
             }
             if (MovValido(Abajo(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Abajo(actual.Pto).Manhattan(this.final));
+                Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Manhattan(Abajo(actual.Pto),this.final));
                 vecinos[1]=abajo;
             }
             if (MovValido(Izquierda(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Izquierda(actual.Pto).Manhattan(this.final));
+                Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Manhattan(Izquierda(actual.Pto),this.final));
                 vecinos[2]=izquierda;
             }
             if (MovValido(Derecha(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
-                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Derecha(actual.Pto).Manhattan(this.final));
+                Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Manhattan(Derecha(actual.Pto),this.final));
                 vecinos[3]=derecha;
             }
             return vecinos;//Se devuelve arreglo con nodos asignados, los que no fueron asignados se devuelven como valor null
@@ -173,18 +181,17 @@ namespace Aestrella
         public void AestrellaManhattan()
         {
             //inicializacion de nodos con heuristica de Manhattan
-            this.inicial = new Nodo(this.inicio, this.inicio.Manhattan(this.final));//Se inicializa nodo inicial con constructor
+            this.inicial = new Nodo(this.inicio, Manhattan(this.inicio,this.final));//Se inicializa nodo inicial con constructor
             PriorityQueue<Nodo,double> menorF = new PriorityQueue<Nodo, double>();//fila que se va a usar para consultar rapido el menor valor de F(Es de complejidad log(n) porque usa heap)
 
             menorF.Enqueue(this.inicial, this.inicial.FTotal);//Se añade a fila
             entrada.Add(this.inicial.Pto,this.inicial);//Se añade a nodos a visitar
             Nodo actual = new Nodo();//nodo actual vacio
-            while (actual.Pto!=this.final)//mientras el punto del nodo actual sea distinto del punto final
-            {
+            while (true)            {
 
                 actual = menorF.Dequeue();//el actual se vuelve el con menor F
                
-                if (actual.Pto.Equals(this.final))
+                if (actual.Pto.Equals(this.final))//Condicion de termino
                     break;
 
                 entrada.Remove(actual.Pto);//Se saca de nodos a visitar
