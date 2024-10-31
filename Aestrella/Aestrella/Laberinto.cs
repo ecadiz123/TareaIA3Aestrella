@@ -169,19 +169,6 @@ namespace Aestrella
             return vecinos;//Se devuelve arreglo con nodos asignados, los que no fueron asignados se devuelven como valor null
         }
 
-        private bool revisaPtoEnLista(Nodo input, List<Nodo> lista)
-        {
-            foreach (Nodo nodo in lista)
-            {
-                if (input.Pto.i == nodo.Pto.i && input.Pto.j == nodo.Pto.j)
-                    return true;
-            }
-            return false;
-        }
-
-
-
-
         //metodo que al correr tendra el camino mas corto en salida 
         public void AestrellaManhattan()
         {
