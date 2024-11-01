@@ -14,7 +14,7 @@ namespace Aestrella
     {
         UP, DOWN, LEFT, RIGHT
     }
-    class Laberinto
+    unsafe class Laberinto
     {   //Campos
         private char[][]? laberinto;//signo de pregunta por si acaso porque StreamReader tiende a tirar valores null cuando no deberia
         private Punto inicio;
@@ -73,16 +73,16 @@ namespace Aestrella
                     if (auxlab[k].Contains('A'))
                     {
                         //Sabiendo que A esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
-                        auxPto1.i = k;
-                        auxPto1.j = Array.FindIndex(auxlab[k], x => x == 'A');
+                        auxPto1.i = (short)k;
+                        auxPto1.j = (short)Array.FindIndex(auxlab[k], x => x == 'A');
                         this.inicio = auxPto1;
 
                     }
                     if (auxlab[k].Contains('B'))
                     {
                         //Sabiendo que B esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
-                        auxPto2.i = k;
-                        auxPto2.j = Array.FindIndex(auxlab[k], x => x == 'B');
+                        auxPto2.i = (short)k;
+                        auxPto2.j = (short)Array.FindIndex(auxlab[k], x => x == 'B');
                         this.final = auxPto2;
                     }
                 }
@@ -146,39 +146,51 @@ namespace Aestrella
         {
             return Math.Abs(puntoInicial.i - puntoFinal.i ) + Math.Abs(puntoInicial.j - puntoFinal.j);
         }
-        public double heuristicaAlt(Punto puntoInicial, Punto puntoFinal)
+        public float heuristicaAlt(Punto puntoInicial, Punto puntoFinal)
         {
-            return 0.3 * Manhattan(puntoInicial,puntoFinal);
+            return 0.3f * (float)Manhattan(puntoInicial,puntoFinal);
 
         }
-        private Nodo[]? vecinosAArreglo(Nodo actual) 
+        private unsafe Nodo[] vecinosAArreglo(Nodo actual) 
         {
             Nodo[] vecinos = new Nodo[4];//Arreglo de tamaño maximo 4
             if (MovValido(Arriba(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
                 Nodo arriba = new Nodo(actual, Arriba(actual.Pto), Manhattan(Arriba(actual.Pto),this.final));
                 vecinos[0]=arriba;
+            }else
+            {
+                vecinos[0] = new Nodo(new Punto(-1, -1), 0);
             }
             if (MovValido(Abajo(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
                 Nodo abajo = new Nodo(actual, Abajo(actual.Pto), Manhattan(Abajo(actual.Pto),this.final));
                 vecinos[1]=abajo;
+            }else
+            {
+                vecinos[1] = new Nodo(new Punto(-1, -1), 0);
             }
             if (MovValido(Izquierda(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
                 Nodo izquierda = new Nodo(actual, Izquierda(actual.Pto), Manhattan(Izquierda(actual.Pto),this.final));
                 vecinos[2]=izquierda;
+            }else
+            {
+                vecinos[2] = new Nodo(new Punto(-1, -1), 0);
             }
             if (MovValido(Derecha(actual.Pto)))
             {   //si es valido se crea como nodo y se agrega
                 Nodo derecha = new Nodo(actual, Derecha(actual.Pto), Manhattan(Derecha(actual.Pto),this.final));
                 vecinos[3]=derecha;
+            }else
+            {
+                vecinos[3] = new Nodo(new Punto(-1, -1), 0);
             }
-            return vecinos;//Se devuelve arreglo con nodos asignados, los que no fueron asignados se devuelven como valor null
+            return vecinos;//Se devuelve arreglo con nodos asignados, los que no fueron asignados se devuelven como valor -1
         }
 
-        //metodo que al correr tendra el camino mas corto en salida 
-        public void AestrellaManhattan()
+        //metodo que devuelve camino mas corto en lista
+        public unsafe void AestrellaManhattan()
         {
             //inicializacion de nodos con heuristica de Manhattan
             this.inicial = new Nodo(this.inicio, Manhattan(this.inicio,this.final));//Se inicializa nodo inicial con constructor
@@ -187,10 +199,10 @@ namespace Aestrella
             menorF.Enqueue(this.inicial, this.inicial.FTotal);//Se añade a fila
             entrada.Add(this.inicial.Pto,this.inicial);//Se añade a nodos a visitar
             Nodo actual = new Nodo();//nodo actual vacio
-            while (true)            {
+            while (true)         
+            {
 
                 actual = menorF.Dequeue();//el actual se vuelve el con menor F
-               
                 if (actual.Pto.Equals(this.final))//Condicion de termino
                     break;
 
@@ -200,7 +212,7 @@ namespace Aestrella
                 //ahora se revisan los 4 vecinos mediante lista
 
                 //actual pasa por metodo que manda vecinos validos a lista
-                Nodo[]? vecinos = vecinosAArreglo(actual);
+                Nodo[] vecinos = vecinosAArreglo(actual);
 
 
                 //Se revisan vecinos validos
@@ -208,15 +220,15 @@ namespace Aestrella
 
                 foreach (Nodo nodovecino in vecinos)
                 {
-                    if (nodovecino != null)//Chequeo importante, ya que por funcion vecionosAArreglo, si el vecino no se puede acceder, el valor es null
+                    if (nodovecino.Pto.i != -1)//Si el nodo contiene un punto al cual no se puede ir(es obstaculo o esta fuera de matriz), su punto es (-1,-1)
                     {
                         if (entrada.ContainsKey(nodovecino.Pto))
                         {
-                            Nodo auxentrada = entrada[nodovecino.Pto];
-                            if (auxentrada.CostoAcumulado > nodovecino.CostoAcumulado) //Se revisa que si G(costo) del vecino es mayor
+                            
+                            if (entrada[nodovecino.Pto].CostoAcumulado > nodovecino.CostoAcumulado) //Se revisa que si G(costo) del vecino es mayor
                             {
                                 //Se elimina de la entrada porque cuesta mas que el vecino
-                                entrada.Remove(auxentrada.Pto);
+                                entrada.Remove(entrada[nodovecino.Pto].Pto);
 
                             }
 
@@ -224,11 +236,10 @@ namespace Aestrella
                         }
                         if (salida.ContainsKey(nodovecino.Pto))
                         {
-                            Nodo auxsalida = salida[nodovecino.Pto];
-                            if (auxsalida.CostoAcumulado > nodovecino.CostoAcumulado) //Se revisa que si G(costo) del vecino
-                            { 
+                            if (salida[nodovecino.Pto].CostoAcumulado > nodovecino.CostoAcumulado) //Se revisa que si G(costo) del vecino
+                            {
                                 //Se elimina de la entrada porque cuesta mas que el vecino
-                                entrada.Remove(auxsalida.Pto);
+                                entrada.Remove(salida[nodovecino.Pto].Pto);
 
                             }
 
@@ -273,15 +284,15 @@ namespace Aestrella
             }
 
 
-            this.llegada = actual; //El while acaba una vez actual es el nodo que contiene al pto objetivo
 
 
             //Donde se guarda camino mas corto a solucion en lista
-            Nodo? aux = this.llegada;
-            while (aux != null)
+            this.solucion.Add(actual);
+            Nodo? aux = actual;
+            while (aux.padre != null)
             {
                 this.solucion.Add(aux);
-                aux = aux.Padre;
+                aux = aux.padre;
             }
             //Por la manera en que se ingresaron los datos
             //la lista esta del nodo final al inicial, entonces se invierte
@@ -313,7 +324,7 @@ namespace Aestrella
             //se hace camino en todos los nodos de solucion excepto por A y B
             foreach (Nodo nodo in solucion)
             {
-                if (!(nodo == solucion.Last() || nodo == solucion[0]))//condicion para que no se reemplazen A y B
+                if (!(nodo.Equals(solucion.Last()) || nodo.Equals(solucion[0])))//condicion para que no se reemplazen A y B
                     labaux[nodo.Pto.i][nodo.Pto.j] = 'x';//caracter del cual se va a hacer el camino
             }
             //copiado y pegado del metodo printLaberinto

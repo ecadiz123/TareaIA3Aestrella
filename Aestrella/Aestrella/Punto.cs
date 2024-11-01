@@ -10,8 +10,8 @@ namespace Aestrella
     internal struct Punto//Clase Puntos para facilitar trabajo con indice 2D
     {   //pensado como matriz donde
         //i=fila j=columna
-        public int i;
-        public int j;
+        public short i;
+        public short j;
         public Punto()
         {
             this.i = 0;
@@ -20,8 +20,8 @@ namespace Aestrella
 
         public Punto(int i, int j)
         {
-            this.i = i;
-            this.j = j;
+            this.i = (short)i;
+            this.j = (short)j;
         }
         //Metodos usados por el diccionario para trabajar con indices
         public override bool Equals([NotNullWhen(true)] object? obj)
@@ -48,31 +48,31 @@ namespace Aestrella
    
 
     }
-    internal class Nodo//Clase que se va a usar para guardar los puntos en las listas
+    internal class Nodo//Clase que se va a usar para guardar los puntos, se usa unsafe para usar punteros
     {
         private Punto pto;
-        private double heuristica;
-        private double fTotal;
+        private float heuristica;
+        private float fTotal;
         //heuristica y Ftotal son double por si llega a haber decimal con calculo de heuristica distinta a Manhattan
         private int costoAcumulado;
-        private Nodo? padre;
+        public Nodo? padre;
         public Punto Pto { get => pto; set => pto = value; }
-        public double Heuristica { get => heuristica; set => heuristica = value; }
-        public double FTotal { get => fTotal; set => fTotal = value; }
+        public float Heuristica { get => heuristica; set => heuristica = value; }
+        public float FTotal { get => fTotal; set => fTotal = value; }
         public int CostoAcumulado { get => costoAcumulado; set => costoAcumulado = value; }
-        internal Nodo Padre { get => padre; set => padre = value; }
-        public Nodo(Nodo padre, Punto pto, double heuristica)//Constructor para nodos ingresados despues
+        
+        public Nodo(Nodo padre, Punto pto, float heuristica)//Constructor para nodos ingresados despues
         {
             
             this.pto = pto;//se ingresa manual
             this.heuristica = heuristica;//se calcula en la clase
-            this.padre = padre;//Se ingresa manual
-            this.costoAcumulado = padre.costoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
-            this.fTotal = Convert.ToDouble(costoAcumulado)+heuristica;
+            this.padre = padre;//Direccion a padre
+            this.costoAcumulado = padre.CostoAcumulado + 1;//Costo del padre + el costo de movimiento padre a nodo ( en este caso es 1)
+            this.fTotal = (float)costoAcumulado+heuristica;
             
             
         }
-        public Nodo(Punto p, double heuristica)//Constructor del primer nodo
+        public  Nodo(Punto p, float heuristica)//Constructor del primer nodo
         {   
 
             this.pto = p;
@@ -81,16 +81,15 @@ namespace Aestrella
             this.costoAcumulado = 0;
             this.padre = null;
         }
-        public Nodo()//Inicializacion de nodo vacio por si acaso se necesita
+        public Nodo()
         {
-            this.padre = null;
+
             this.pto = new Punto();
             this.heuristica = 0;
-            this.costoAcumulado= 0;
             this.fTotal = 0;
-            
-           }
-
-    }
+            this.costoAcumulado = 0;
+            this.padre = null;
+        }
+}
 
 }
