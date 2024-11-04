@@ -14,9 +14,9 @@ namespace Aestrella
     {
         UP, DOWN, LEFT, RIGHT
     }
-    unsafe class Laberinto
+    class Laberinto
     {   //Campos
-        private char[][]? laberinto;//signo de pregunta por si acaso porque StreamReader tiende a tirar valores null cuando no deberia
+        private char[,]? laberinto;//signo de pregunta por si acaso porque StreamReader tiende a tirar valores null cuando no deberia
         private Punto inicio;
         private Punto final;
         private Nodo inicial;
@@ -44,21 +44,21 @@ namespace Aestrella
                 int size = charaux.Length;//tamaño obtenido manualmente
                 this.size = size;//
 
-                //como laberintos van a ser cuadrados se usa largo de primera linea
-                //el arreglo es de tipo escalonado o jagged, donde la cantidad de filas
-                //es estatica, pero las columnas son dinamicas, por eso solo se declara las 
-                //filas como tamaño
-                char[][] auxlab = new char[size][];
-                auxlab[0] = charaux;
+                char[,] auxlab = new char[size,size];
+                for (int j = 0;j<size;j++)
+                {
+                    auxlab[0,j]= charaux[j];
+                }
                 int i = 1;//i, contador que se va a usar para rellenar arreglo
                 while (aux.Peek() != -1) //cuando metodo peek de StreamReader devuelve -1, no hay mas caracteres en el archivo
                 {
 
                     charaux = aux.ReadLine().ToCharArray();
+                    for (int j = 0; j < size; j++)
+                    {
+                        auxlab[i,j] = charaux[j];
+                    }
 
-
-
-                    auxlab[i] = charaux;
                     i++;
                 }
                 this.laberinto = auxlab;
@@ -70,20 +70,23 @@ namespace Aestrella
                 Punto auxPto2 = new Punto();//final
                 for (int k = 0; k < size; k++)
                 {
-                    if (auxlab[k].Contains('A'))
+                    for (int j = 0; j < size; j++)
                     {
-                        //Sabiendo que A esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
-                        auxPto1.i = (short)k;
-                        auxPto1.j = (short)Array.FindIndex(auxlab[k], x => x == 'A');
-                        this.inicio = auxPto1;
+                        if (auxlab[k, j] == 'A')
+                        {
+                            //Sabiendo que A esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
+                            auxPto1.i = (short)k;
+                            auxPto1.j = (short)j;
+                            this.inicio = auxPto1;
 
-                    }
-                    if (auxlab[k].Contains('B'))
-                    {
-                        //Sabiendo que B esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
-                        auxPto2.i = (short)k;
-                        auxPto2.j = (short)Array.FindIndex(auxlab[k], x => x == 'B');
-                        this.final = auxPto2;
+                        }
+                        if (auxlab[k, j] == 'B')
+                        {
+                            //Sabiendo que B esta en la fila k, se obtiene la columna mediante metodo que devuelve el indice de arreglo
+                            auxPto2.i = (short)k;
+                            auxPto2.j = (short)j;
+                            this.final = auxPto2;
+                        }
                     }
                 }
                 
@@ -102,14 +105,18 @@ namespace Aestrella
             {
                 for (int j = 0; j < size; j++)
                 {
-                    Console.Write(laberinto[i][j]);
+                    Console.Write(laberinto[i,j]);
                 }
                 Console.WriteLine();
             }
 
+
+        }
+        public void printInicioFinal()
+        {
+
             Console.WriteLine($"inicio: {inicio.i},{inicio.j}");
             Console.WriteLine($"final: {final.i},{final.j}");
-
         }
 
         public bool MovValido(Punto punto)
@@ -124,7 +131,7 @@ namespace Aestrella
 
             // Verifica que el siguiente punto no sea un obstáculo, en caso de serlo, 
             // retorna falso.
-            else if (laberinto[punto.i][punto.j] == '#') { return false; }
+            else if (laberinto[punto.i,punto.j] == '#') { return false; }
 
             // Si todas las condiciones se cumplen, retorna true, es decir, el movimiento es válido.
             return true;
@@ -151,7 +158,7 @@ namespace Aestrella
             return 0.3f * (float)Manhattan(puntoInicial,puntoFinal);
 
         }
-        private unsafe Nodo[] vecinosAArreglo(Nodo actual) 
+        private Nodo[] vecinosAArreglo(Nodo actual) 
         {
             Nodo[] vecinos = new Nodo[4];//Arreglo de tamaño maximo 4
             if (MovValido(Arriba(actual.Pto)))
@@ -190,7 +197,7 @@ namespace Aestrella
         }
 
         //metodo que devuelve camino mas corto en lista
-        public unsafe void AestrellaManhattan()
+        public void AestrellaManhattan()
         {
             //inicializacion de nodos con heuristica de Manhattan
             this.inicial = new Nodo(this.inicio, Manhattan(this.inicio,this.final));//Se inicializa nodo inicial con constructor
@@ -205,6 +212,7 @@ namespace Aestrella
                 actual = menorF.Dequeue();//el actual se vuelve el con menor F
                 if (actual.Pto.Equals(this.final))//Condicion de termino
                     break;
+
 
                 entrada.Remove(actual.Pto);//Se saca de nodos a visitar
                 salida.Add(actual.Pto, actual);
@@ -287,13 +295,14 @@ namespace Aestrella
 
 
             //Donde se guarda camino mas corto a solucion en lista
-            this.solucion.Add(actual);
             Nodo? aux = actual;
             while (aux.padre != null)
             {
                 this.solucion.Add(aux);
                 aux = aux.padre;
             }
+            this.solucion.Add(aux);//Se ingresa el primer nodo
+
             //Por la manera en que se ingresaron los datos
             //la lista esta del nodo final al inicial, entonces se invierte
             //para que comience del primer nodo
@@ -320,19 +329,19 @@ namespace Aestrella
         }
         public void printLaberintoCamino()
         {
-            char[][] labaux = this.laberinto;//se hace un laberinto auxiliar
+            char[,] labaux = this.laberinto;//se hace un laberinto auxiliar
             //se hace camino en todos los nodos de solucion excepto por A y B
             foreach (Nodo nodo in solucion)
             {
                 if (!(nodo.Equals(solucion.Last()) || nodo.Equals(solucion[0])))//condicion para que no se reemplazen A y B
-                    labaux[nodo.Pto.i][nodo.Pto.j] = 'x';//caracter del cual se va a hacer el camino
+                    labaux[nodo.Pto.i,nodo.Pto.j] = 'x';//caracter del cual se va a hacer el camino
             }
             //copiado y pegado del metodo printLaberinto
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    Console.Write(labaux[i][j]);
+                    Console.Write(labaux[i, j]);
                 }
                 Console.WriteLine();
             }
